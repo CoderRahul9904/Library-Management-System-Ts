@@ -554,6 +554,11 @@ video {
   --tw-contain-style:  ;
 }
 
+.bg-green-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(187 247 208 / var(--tw-bg-opacity));
+}
+
 .text-center {
   text-align: center;
 }
@@ -565,11 +570,6 @@ video {
 
 .font-bold {
   font-weight: 700;
-}
-
-.text-blue-700 {
-  --tw-text-opacity: 1;
-  color: rgb(29 78 216 / var(--tw-text-opacity));
 }
 
 .text-blue-600 {
