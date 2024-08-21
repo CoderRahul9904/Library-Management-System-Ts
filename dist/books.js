@@ -56,10 +56,49 @@ class Header {
         this.templateElement = document.getElementById('header-template');
         this.hostElement = document.getElementById('Header');
         this.renderHeader();
+        this.searchBar = this.attachSearchInput();
+    }
+    attachSearchInput() {
+        const SearchBookEle = this.hostElement.querySelector('.SearchBook');
+        return SearchBookEle;
     }
     renderHeader() {
         const headerNode = document.importNode(this.templateElement.content, true);
         this.hostElement.appendChild(headerNode);
+    }
+}
+class showSingleBook extends Header {
+    constructor() {
+        super();
+        this.templateElement = document.getElementById('book-search-template');
+        this.hostElement = document.getElementById('book-search');
+        this.searchBar.addEventListener('input', this.OnChangeOfSearch.bind(this));
+    }
+    OnChangeOfSearch() {
+        this.hostElement.replaceChildren();
+        const SearchValue = ((this.searchBar.value).trim()).toUpperCase();
+        console.log(SearchValue);
+        const SearchedBooks = books.filter((book) => book.title.trim().includes(SearchValue));
+        console.log(SearchedBooks);
+        this.renderSingleBook(SearchedBooks);
+    }
+    renderSingleBook(Book) {
+        for (const book of Book) {
+            if (book) {
+                const SearchedBookNode = document.importNode(this.templateElement.content, true);
+                const img = SearchedBookNode.querySelector('.SearchedBookImg');
+                img.src = book.imageUrl;
+                const titleTd = SearchedBookNode.querySelector('.BookTitle');
+                titleTd.textContent = book.title;
+                const descriptionTd = SearchedBookNode.querySelector('.BookDescription');
+                descriptionTd.textContent = book.description;
+                this.hostElement.appendChild(SearchedBookNode);
+            }
+            else {
+                return;
+            }
+        }
+        return;
     }
 }
 class notification {
@@ -70,9 +109,16 @@ class notification {
     }
     renderNotification() {
         const notificationNode = document.importNode(this.templateElement.content, true);
-        this.hostElement.appendChild(notificationNode);
+        console.log(notificationNode);
+        const appendedNotification = this.hostElement.appendChild(notificationNode);
+        console.log(appendedNotification);
         setTimeout(() => {
-            this.hostElement.removeChild(notificationNode);
+            if (appendedNotification && this.hostElement.contains(appendedNotification)) {
+                this.hostElement.removeChild(appendedNotification);
+            }
+            else {
+                console.log("error is here");
+            }
         }, 2000);
     }
 }
@@ -102,6 +148,6 @@ class displaybooks {
         this.hostElement.appendChild(bookDivNode);
     }
 }
-const renderHeader = new Header();
+const searchBarObj = new showSingleBook();
 const notify = new notification();
 const renderBooks = new displaybooks();
