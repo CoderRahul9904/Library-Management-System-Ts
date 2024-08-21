@@ -64,19 +64,68 @@ interface Book {
 class Header{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;
+    searchBar: HTMLInputElement;
 
     constructor(){
         this.templateElement= document.getElementById('header-template')! as HTMLTemplateElement
         this.hostElement= document.getElementById('Header')! as HTMLElement
         this.renderHeader()
+        this.searchBar= this.attachSearchInput()
     }
-
+    private attachSearchInput(){
+        const SearchBookEle=this.hostElement.querySelector('.SearchBook')! as HTMLInputElement
+        return SearchBookEle
+    }
     private renderHeader(){
         const headerNode= document.importNode(this.templateElement.content,true)
         this.hostElement.appendChild(headerNode)
     }
 }
 
+
+class showSingleBook extends Header{
+  templateElement: HTMLTemplateElement;
+  hostElement: HTMLElement;
+
+
+  constructor(){
+    super()
+    this.templateElement=document.getElementById('book-search-template')! as HTMLTemplateElement;
+    this.hostElement=document.getElementById('book-search')! as HTMLElement
+    
+    this.searchBar.addEventListener('input',this.OnChangeOfSearch.bind(this))
+  }
+
+
+  private OnChangeOfSearch(){
+    this.hostElement.replaceChildren()
+    const SearchValue=((this.searchBar.value).trim()).toUpperCase()
+    console.log(SearchValue)
+    const SearchedBooks=books.filter((book) => book.title.trim().includes(SearchValue)) as Book[]
+    console.log(SearchedBooks)
+    this.renderSingleBook(SearchedBooks)
+  }
+
+
+  private renderSingleBook(Book: Book[]){
+    
+    for(const book of Book){
+      if(book){
+      const SearchedBookNode=document.importNode(this.templateElement.content,true)
+      const img=SearchedBookNode.querySelector('.SearchedBookImg') as HTMLImageElement
+      img.src=book.imageUrl
+      const titleTd=SearchedBookNode.querySelector('.BookTitle') as HTMLTableCellElement
+      titleTd.textContent=book.title
+      const descriptionTd=SearchedBookNode.querySelector('.BookDescription') as HTMLTableCellElement
+      descriptionTd.textContent=book.description
+      this.hostElement.appendChild(SearchedBookNode)
+      }else{
+        return
+      }
+    }
+    return
+  }
+}
 
 class notification{
     templateElement: HTMLTemplateElement;
@@ -89,12 +138,17 @@ class notification{
     }
 
     private renderNotification(){
-        const notificationNode=document.importNode(this.templateElement.content,true)
-        this.hostElement.appendChild(notificationNode)
-        setTimeout(()=>{
-            this.hostElement.removeChild(notificationNode);
-        },2000)
-        
+      const notificationNode = document.importNode(this.templateElement.content, true);
+      console.log(notificationNode)
+      const appendedNotification = this.hostElement.appendChild(notificationNode)
+      console.log(appendedNotification)
+      setTimeout(() => {
+          if (appendedNotification && this.hostElement.contains(appendedNotification)) {
+              this.hostElement.removeChild(appendedNotification);
+          }else{
+            console.log("error is here")
+          }
+      }, 2000);
     }
 }
 
@@ -123,6 +177,7 @@ class displaybooks{
     
         for (const book of books) {
           const booksContentNode = document.importNode(this.templateElement.content, true);
+          
           const img = booksContentNode.querySelector('.BookImage') as HTMLImageElement;
           
           if (img) {
@@ -139,10 +194,9 @@ class displaybooks{
         const bookDivNode = document.importNode(this.templateInitialStepBooks.content, true);
         this.hostElement.appendChild(bookDivNode);
     }
-
 }
 
 
-const renderHeader= new Header()
+const searchBarObj= new showSingleBook()
 const notify=new notification()
 const renderBooks= new displaybooks()
