@@ -7,13 +7,13 @@
   <title>Library Management System</title>
   <link href="./output.css" rel="stylesheet">
 </head>
-<body class=" bg-green-200">
+<body class=" bg-green-200 relative ">
   <!-- Header -->
    <template id="header-template">
     <div class=" w-screen flex flex-row justify-evenly items-center p-5">
       <img  class=" hover:cursor-pointer w-10 h-10 rounded-lg" src="./public/LibraryIcon.png" alt="Library logo"/>
       <div class=" w-[70%] h-10 flex flex-row gap-0">
-        <input class=" text-center w-[100%] h-full hover:cursor-pointer rounded-l-md" placeholder="Search for book"/>
+        <input class="SearchBook text-center w-[100%] h-full hover:cursor-pointer rounded-l-md" placeholder="Search for book"/>
         <div class=" rounded-r-md hover:cursor-pointer bg-green-500 flex justify-center items-center">
           <svg class=" w-5 h-5 object-contain px-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="darkgreen">
             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
@@ -47,7 +47,7 @@
       <div class=" w-full h-auto rounded-xl">
         <img class=" BookImage w-full h-auto object-contain rounded-lg"  alt="Rich Dad Poor Dad Image"/>
       </div>
-      <div class=" w-24 h-auto bg-blue-400 rounded-lg my-2 hover:cursor-pointer">
+      <div class=" w-24 h-auto bg-green-400 text-center rounded-lg my-2 hover:cursor-pointer">
         <button class=" p-1 text-center text-green-900 text-bold" id="open">Issue</button>
       </div>
     </div>
@@ -61,7 +61,7 @@
   
   <!-- issuer details -->
   <template>
-    <div class="modal w-100 mx-0 md:w-auto md:mx-32 h-auto rounded-lg z-50">
+    <div class=" w-100 mx-0 md:w-auto md:mx-32 h-auto rounded-lg z-50">
       <form >
         <div class=" flex flex-col bg-amber-300 p-5 gap-2 rounded-lg">
           <p class=" text-bold text-sm text-stone-700">Email</p>
@@ -83,37 +83,41 @@
   </template>
   
   <!-- for book search -->
-   <template>
-    <div class=" flex flex-col mx-auto my-auto w-full h-auto sm:w-[50%] gap-5 justify-center items-center">
-      <img class=" w-[90%] h-auto sm:w-[40%] sm:h-[20%] object-contain rounded-xl" src="./public/ApJAbdulKalam.jpg" alt=" APJ Sir image"/>
-      <table class=" w-[90%] h-auto sm:w-[40%] sm:h-[20%]">
-        <tr>
-          <th class="text-bold text-xl text-stone-800 text-start">TITLE: </th>
-          <td class="text-bold text-sm text-stone-700 ">APJ Sir book</td>
+  <template id="book-search-template">
+    <div class="flex flex-wrap mx-auto my-auto rounded-md w-full h-auto sm:w-[50%] gap-5 sm:gap-10 justify-center items-center sm:border sm:border-stone-600">
+      <img class="SearchedBookImg w-[90%] h-auto sm:w-[40%] sm:h-[20%] object-contain rounded-xl" src="" alt="" />
+      <table class="w-screen h-auto sm:w-[40%] sm:h-[20%] border border-gray-300">
+        <tr class="border-b border-gray-300">
+          <th class="text-bold text-xl text-stone-800 sm:text-sm text-start border-r border-gray-300 p-2">TITLE:</th>
+          <td class="BookTitle text-bold text-sm text-stone-700 border-r border-gray-300 p-2"></td>
         </tr>
         <tr>
-          <th class="text-bold text-xl text-stone-800 text-start">DESCRIPTION: </th>
-          <td class="text-bold text-sm text-stone-700 ">abcdefghijklmnopqrstuvwxyz w-[90%] h-auto sm:w-[40%] sm:h-[20%] w-[90%] h-auto sm:w-[40%] sm:h-[20%]</td>
+          <th class="text-bold text-xl text-stone-800 text-start sm:text-sm border-t border-gray-300 p-2">DESCRIPTION:</th>
+          <td class="BookDescription text-bold text-sm text-stone-700 border-t border-gray-300 p-2"></td>
         </tr>
-      </table>        
+      </table>
+      <button class=" p-1 w-full text-center text-green-900 bg-green-400 rounded-md text-bold" id="open">Issue</button>
     </div>
-   </template>
+  </template>
+  
+  <modal id="modal" class=" absolute left-0 top-0 w-screen h-auto bg-opacity-50 backdrop-blur-sm">
+    
+  </modal>
 
-
-  <div id="app">
+  <div id="app" >
     <header id="Header">
       <!-- header will render here -->
     </header>
     <notification id="Notification">
       <!-- dynamic notification here -->
     </notification>
+
     <books id="books">
       <!-- books here -->
     </books>
 
-    <bookSearch>
-      
-      
+    <bookSearch id="book-search">
+      <!-- searchedBookHere -->
     </bookSearch>
   </div>
   <script src="dist/books.js"></script>
