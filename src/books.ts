@@ -157,33 +157,28 @@ class displaybooks{
     hostElement: HTMLElement;
     templateInitialStepBooks: HTMLTemplateElement;
     
-    
-
     constructor(){
         this.templateElement=document.getElementById('books-template')! as HTMLTemplateElement
         this.hostElement=document.getElementById('books')! as HTMLElement
         this.templateInitialStepBooks= document.getElementById('books-initial-setup')! as HTMLTemplateElement
-        
-
         this.renderInitialLayout()
-        
         this.renderBooks()
-        
     }
-
+    
     private renderBooks() {
         const gridDiv = this.hostElement.firstElementChild as HTMLDivElement;
         const fragment = document.createDocumentFragment();
-    
         for (const book of books) {
           const booksContentNode = document.importNode(this.templateElement.content, true);
-          
           const img = booksContentNode.querySelector('.BookImage') as HTMLImageElement;
-          
+          const modalOpenButton = booksContentNode.querySelector('.open')! as HTMLButtonElement;
           if (img) {
             img.src = book.imageUrl;
           }
-          
+          modalOpenButton.addEventListener('click', () => {
+            const modal = new Modal();
+            modal.open();
+          });
           fragment.appendChild(booksContentNode);
         }
     
@@ -196,6 +191,35 @@ class displaybooks{
     }
 }
 
+
+class Modal{
+  templateElement: HTMLTemplateElement;
+  hostElement: HTMLElement;
+
+  constructor(){
+    this.templateElement=document.getElementById('modal-details')! as HTMLTemplateElement
+    this.hostElement=document.getElementById('modal')! as HTMLElement
+  }
+  public open(){
+    if(this.hostElement.classList.contains('hidden')){
+      this.hostElement.classList.remove('hidden')
+    }
+    const ModalNode=document.importNode(this.templateElement.content,true)
+    const closeModalButton= ModalNode.querySelector('.close')! as HTMLButtonElement
+    closeModalButton.addEventListener('click',this.close.bind(this))
+    this.hostElement.appendChild(ModalNode)
+  }
+
+  public close(){
+    console.log("Yes I am Working")
+    if(!(this.hostElement.classList.contains('hidden'))){
+      this.hostElement.classList.add('hidden')
+
+    }else{
+      console.log("causing Error")
+    }
+  }
+}
 
 const searchBarObj= new showSingleBook()
 const notify=new notification()
