@@ -48,7 +48,7 @@
         <img class=" BookImage w-full h-auto object-contain rounded-lg"  alt="Rich Dad Poor Dad Image"/>
       </div>
       <div class=" w-24 h-auto bg-green-400 text-center rounded-lg my-2 hover:cursor-pointer">
-        <button class=" p-1 text-center text-green-900 text-bold" id="open">Issue</button>
+        <button class=" open p-1 text-center text-green-900 text-bold" >Issue</button>
       </div>
     </div>
   </template>
@@ -60,8 +60,8 @@
   
   
   <!-- issuer details -->
-  <template>
-    <div class=" w-100 mx-0 md:w-auto md:mx-32 h-auto rounded-lg z-50">
+  <template id="modal-details">
+    <div class=" w-100% m-0 md:w-auto md:m-32 h-auto rounded-lg translate-y-[50%] z-50">
       <form >
         <div class=" flex flex-col bg-amber-300 p-5 gap-2 rounded-lg">
           <p class=" text-bold text-sm text-stone-700">Email</p>
@@ -74,8 +74,8 @@
           <input type="text" placeholder="Enter Your Last Name" class=" rounded-sm w-full p-2"/>
     
           <div class=" flex justify-between w-full">
-            <p class=" text-sm text-green-800 text-bold sm:text-lg">Enter the details to issue a book</p>
-            <button class=" bg-green-700 text-bold text-sm p-1 rounded-md hover:bg-green-600 sm:text-lg sm:p-3" id="submit">Submit</button>
+            <p class=" text-sm text-green-800 text-bold sm:text-xl">Enter the details to issue a book</p>
+            <button  class=" close bg-green-700 text-bold text-sm p-1 rounded-md hover:bg-green-600 sm:text-lg sm:p-3" id="submit">Submit</button>
           </div>
         </div>
       </form>
@@ -100,7 +100,7 @@
     </div>
   </template>
   
-  <modal id="modal" class=" absolute left-0 top-0 w-screen h-auto bg-opacity-50 backdrop-blur-sm">
+  <modal id="modal" class=" absolute top-1/4 sm:top-0 w-full h-full hidden bg-opacity-50 backdrop-blur-sm">
     
   </modal>
 
