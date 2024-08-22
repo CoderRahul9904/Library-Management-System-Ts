@@ -136,9 +136,14 @@ class displaybooks {
         for (const book of books) {
             const booksContentNode = document.importNode(this.templateElement.content, true);
             const img = booksContentNode.querySelector('.BookImage');
+            const modalOpenButton = booksContentNode.querySelector('.open');
             if (img) {
                 img.src = book.imageUrl;
             }
+            modalOpenButton.addEventListener('click', () => {
+                const modal = new Modal();
+                modal.open();
+            });
             fragment.appendChild(booksContentNode);
         }
         gridDiv.appendChild(fragment);
@@ -146,6 +151,30 @@ class displaybooks {
     renderInitialLayout() {
         const bookDivNode = document.importNode(this.templateInitialStepBooks.content, true);
         this.hostElement.appendChild(bookDivNode);
+    }
+}
+class Modal {
+    constructor() {
+        this.templateElement = document.getElementById('modal-details');
+        this.hostElement = document.getElementById('modal');
+    }
+    open() {
+        if (this.hostElement.classList.contains('hidden')) {
+            this.hostElement.classList.remove('hidden');
+        }
+        const ModalNode = document.importNode(this.templateElement.content, true);
+        const closeModalButton = ModalNode.querySelector('.close');
+        closeModalButton.addEventListener('click', this.close.bind(this));
+        this.hostElement.appendChild(ModalNode);
+    }
+    close() {
+        console.log("Yes I am Working");
+        if (!(this.hostElement.classList.contains('hidden'))) {
+            this.hostElement.classList.add('hidden');
+        }
+        else {
+            console.log("causing Error");
+        }
     }
 }
 const searchBarObj = new showSingleBook();
