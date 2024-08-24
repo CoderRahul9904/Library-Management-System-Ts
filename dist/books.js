@@ -1,4 +1,10 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 const books = [
     {
         title: "RICH DAD POOR DAD",
@@ -51,6 +57,17 @@ const books = [
         imageUrl: '../public/AtomicHabbitsV2.jpg'
     }
 ];
+function Autobind(_, _2, descriptor) {
+    const originalMethod = descriptor.value;
+    const adjustableDescriptor = {
+        configurable: true,
+        get() {
+            const boundFn = originalMethod.bind(this);
+            return boundFn;
+        }
+    };
+    return adjustableDescriptor;
+}
 class Header {
     constructor() {
         this.templateElement = document.getElementById('header-template');
@@ -72,7 +89,7 @@ class showSingleBook extends Header {
         super();
         this.templateElement = document.getElementById('book-search-template');
         this.hostElement = document.getElementById('book-search');
-        this.searchBar.addEventListener('input', this.OnChangeOfSearch.bind(this));
+        this.searchBar.addEventListener('input', this.OnChangeOfSearch);
     }
     OnChangeOfSearch() {
         this.hostElement.replaceChildren();
@@ -101,6 +118,9 @@ class showSingleBook extends Header {
         return;
     }
 }
+__decorate([
+    Autobind
+], showSingleBook.prototype, "OnChangeOfSearch", null);
 class notification {
     constructor() {
         this.templateElement = document.getElementById('notification-template');
@@ -120,6 +140,25 @@ class notification {
                 console.log("error is here");
             }
         }, 2000);
+    }
+}
+class IssuerDetails {
+    constructor() {
+        this.templateElement = document.getElementById('IssuerInfo');
+        this.hostElement = document.getElementById('IssuerDetails');
+    }
+    fillDetails() {
+        const TargetUser = Modal.UserInfo.length - 1;
+        const Issued_Date = new Date();
+        const IssuerInfoNode = document.importNode(this.templateElement.content, true);
+        const IssuerName = IssuerInfoNode.querySelector('.IssuerName');
+        IssuerName.textContent = `${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`;
+        const IssuedDate = IssuerInfoNode.querySelector('.IssuedDate');
+        IssuedDate.textContent = `${Issued_Date}`;
+        const ReturnDate = IssuerInfoNode.querySelector('.ReturnDate');
+        const IssuerEmail = IssuerInfoNode.querySelector('.Email');
+        IssuerEmail.textContent = `${Modal.UserInfo[TargetUser].email}`;
+        this.hostElement.appendChild(IssuerInfoNode);
     }
 }
 class displaybooks {
@@ -164,19 +203,28 @@ class Modal {
         }
         const ModalNode = document.importNode(this.templateElement.content, true);
         const closeModalButton = ModalNode.querySelector('.close');
-        closeModalButton.addEventListener('click', this.close.bind(this));
+        closeModalButton.addEventListener('click', (event) => this.close(event));
         this.hostElement.appendChild(ModalNode);
     }
-    close() {
-        console.log("Yes I am Working");
+    close(event) {
+        const form = document.getElementById('user-form');
+        event.preventDefault();
+        const IssuerDetail = new FormData(form);
+        const User = Object.fromEntries(IssuerDetail.entries());
+        Modal.UserInfo.push(User);
+        // console.log(Modal.UserInfo)
+        const test = new IssuerDetails();
+        test.fillDetails();
+        this.hostElement.replaceChildren();
         if (!(this.hostElement.classList.contains('hidden'))) {
             this.hostElement.classList.add('hidden');
         }
-        else {
-            console.log("causing Error");
-        }
     }
 }
+Modal.UserInfo = [];
+__decorate([
+    Autobind
+], Modal.prototype, "close", null);
 const searchBarObj = new showSingleBook();
 const notify = new notification();
 const renderBooks = new displaybooks();
