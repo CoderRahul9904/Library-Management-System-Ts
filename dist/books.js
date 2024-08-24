@@ -1,10 +1,10 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+import { format } from "date-fns";
 const books = [
     {
         title: "RICH DAD POOR DAD",
@@ -150,11 +150,13 @@ class IssuerDetails {
     fillDetails() {
         const TargetUser = Modal.UserInfo.length - 1;
         const Issued_Date = new Date();
+        console.log(Issued_Date);
+        const formattedDate = format(Issued_Date, "do MMMM yyyy 'at' h:mma");
         const IssuerInfoNode = document.importNode(this.templateElement.content, true);
         const IssuerName = IssuerInfoNode.querySelector('.IssuerName');
         IssuerName.textContent = `${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`;
         const IssuedDate = IssuerInfoNode.querySelector('.IssuedDate');
-        IssuedDate.textContent = `${Issued_Date}`;
+        IssuedDate.textContent = `${formattedDate}`;
         const ReturnDate = IssuerInfoNode.querySelector('.ReturnDate');
         const IssuerEmail = IssuerInfoNode.querySelector('.Email');
         IssuerEmail.textContent = `${Modal.UserInfo[TargetUser].email}`;

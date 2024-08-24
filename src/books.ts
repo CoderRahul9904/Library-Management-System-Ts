@@ -1,3 +1,4 @@
+
 interface Book {
     title: string;
     description: string;
@@ -181,6 +182,8 @@ class IssuerDetails{
   public fillDetails(){
     const TargetUser=Modal.UserInfo.length-1
     const Issued_Date=new Date()
+    console.log(Issued_Date)
+    
     const IssuerInfoNode= document.importNode(this.templateElement.content,true)
     const IssuerName= IssuerInfoNode.querySelector('.IssuerName')! as HTMLElement
     IssuerName.textContent=`${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`
