@@ -62,16 +62,16 @@
   <!-- issuer details -->
   <template id="modal-details">
     <div class=" w-100% m-0 md:w-auto md:m-32 h-auto rounded-lg translate-y-[50%] z-50">
-      <form >
+      <form id="user-form">
         <div class=" flex flex-col bg-amber-300 p-5 gap-2 rounded-lg">
           <p class=" text-bold text-sm text-stone-700">Email</p>
-          <input type="email" placeholder="Enter Your Email" class=" rounded-sm w-full p-2"/>
+          <input name="email" type="email" placeholder="Enter Your Email" class=" rounded-sm w-full p-2"/>
     
           <p class=" text-bold text-sm text-stone-700">First Name</p>
-          <input type="text" placeholder="Enter Your First Name" class=" rounded-sm w-full p-2"/>
+          <input name="firstName" type="text" placeholder="Enter Your First Name" class=" rounded-sm w-full p-2"/>
     
           <p class=" text-bold text-sm text-stone-700">Last Name</p>
-          <input type="text" placeholder="Enter Your Last Name" class=" rounded-sm w-full p-2"/>
+          <input name="lastName" type="text" placeholder="Enter Your Last Name" class=" rounded-sm w-full p-2"/>
     
           <div class=" flex justify-between w-full">
             <p class=" text-sm text-green-800 text-bold sm:text-xl">Enter the details to issue a book</p>
@@ -99,10 +99,36 @@
       <button class=" p-1 w-full text-center text-green-900 bg-green-400 rounded-md text-bold" id="open">Issue</button>
     </div>
   </template>
+
+
+  <template id="IssuerInfo">
+    <div class=" m-5 bg-amber-200 w-auto hover:cursor-pointer rounded-lg hover:bg-amber-300">
+      <div class=" flex flex-row justify-between h-auto ">
+        <h1 class=" IssuerName p-2 text-xl text-bold text-green-700  font-serif"></h1>
+        <svg class=" w-9 h-9 p-2 hover:cursor-pointer" fill="darkgreen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M256 0a256 256 0 1 0 0 512A256 256 0 1 0 256 0zM135 241c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l87 87 87-87c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9L273 345c-9.4 9.4-24.6 9.4-33.9 0L135 241z"/>
+        </svg>
+      </div>
+      <div class=" ">
+        <!-- <p class=" BookName text-3xl font-bold text-red-600 p-2">RICH DAD POOR DAD</p> -->
+        <div class=" flex flex-row justify-between">
+          <h1 class=" text-2xl font-bold px-2">Issued Date: <span class=" IssuedDate font-semibold  text-sm">23rd August 2024 at 5:30pm</span></h1>
+          <h1 class=" text-2xl font-bold px-2">Return Date: <span class=" ReturnDate font-semibold text-sm">8th September 2024 at 5:30pm</span></h1>
+        </div>
+        <p class=" Email text-sm font-bold text-center p-2"></p>
+      </div>
+    </div>
+  </template>
   
   <modal id="modal" class=" absolute top-1/4 sm:top-0 w-full h-full hidden bg-opacity-50 backdrop-blur-sm">
-    
+
   </modal>
+
+
+  <!-- which book is issued by whom -->
+  <div id="IssuerDetails" class=" absolute top-20 sm:top-32 sm:left-[20%] m-2 w-full h-auto sm:w-[60%] rounded-lg bg-green-400 z-30 ">
+    
+  </div>
 
   <div id="app" >
     <header id="Header">
