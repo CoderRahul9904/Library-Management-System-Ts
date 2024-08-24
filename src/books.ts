@@ -3,6 +3,12 @@ interface Book {
     description: string;
     imageUrl: string;
   }
+interface UserInfoType{
+    // firstName: string;
+    // lastName: string;
+    // email: string;
+    [k: string]: FormDataEntryValue;
+    }
 
   const books: Book[] = [
     {
@@ -61,6 +67,18 @@ interface Book {
   
 
 
+function Autobind(_: any, _2: string | Symbol, descriptor: PropertyDescriptor): PropertyDescriptor{
+  const originalMethod=descriptor.value;
+  const adjustableDescriptor: PropertyDescriptor = {
+    configurable : true,
+    get(){
+        const boundFn = originalMethod.bind(this);
+        return boundFn;
+    }
+  }
+  return adjustableDescriptor;
+}
+
 class Header{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;
@@ -93,10 +111,10 @@ class showSingleBook extends Header{
     this.templateElement=document.getElementById('book-search-template')! as HTMLTemplateElement;
     this.hostElement=document.getElementById('book-search')! as HTMLElement
     
-    this.searchBar.addEventListener('input',this.OnChangeOfSearch.bind(this))
+    this.searchBar.addEventListener('input',this.OnChangeOfSearch)
   }
 
-
+  @Autobind
   private OnChangeOfSearch(){
     this.hostElement.replaceChildren()
     const SearchValue=((this.searchBar.value).trim()).toUpperCase()
@@ -136,7 +154,7 @@ class notification{
         this.hostElement= document.getElementById('Notification')! as HTMLElement
         this.renderNotification()
     }
-
+    
     private renderNotification(){
       const notificationNode = document.importNode(this.templateElement.content, true);
       console.log(notificationNode)
@@ -151,6 +169,31 @@ class notification{
       }, 2000);
     }
 }
+class IssuerDetails{
+  templateElement: HTMLTemplateElement;
+  hostElement: HTMLElement;
+
+  constructor(){
+    this.templateElement= document.getElementById('IssuerInfo')! as HTMLTemplateElement
+    this.hostElement= document.getElementById('IssuerDetails')! as HTMLElement
+  }
+
+  public fillDetails(){
+    const TargetUser=Modal.UserInfo.length-1
+    const Issued_Date=new Date()
+    const IssuerInfoNode= document.importNode(this.templateElement.content,true)
+    const IssuerName= IssuerInfoNode.querySelector('.IssuerName')! as HTMLElement
+    IssuerName.textContent=`${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`
+    const IssuedDate= IssuerInfoNode.querySelector('.IssuedDate')! as HTMLSpanElement
+    IssuedDate.textContent=`${Issued_Date}`
+    const ReturnDate= IssuerInfoNode.querySelector('.ReturnDate')! as HTMLSpanElement
+    const IssuerEmail= IssuerInfoNode.querySelector('.Email')! as HTMLParagraphElement
+    IssuerEmail.textContent=`${Modal.UserInfo[TargetUser].email}`
+    this.hostElement.appendChild(IssuerInfoNode)
+  }
+}
+
+
 
 class displaybooks{
     templateElement: HTMLTemplateElement;
@@ -192,31 +235,41 @@ class displaybooks{
 }
 
 
+
+
 class Modal{
   templateElement: HTMLTemplateElement;
   hostElement: HTMLElement;
+  public static UserInfo: UserInfoType[] = [];
 
   constructor(){
     this.templateElement=document.getElementById('modal-details')! as HTMLTemplateElement
     this.hostElement=document.getElementById('modal')! as HTMLElement
   }
+  
   public open(){
     if(this.hostElement.classList.contains('hidden')){
       this.hostElement.classList.remove('hidden')
     }
     const ModalNode=document.importNode(this.templateElement.content,true)
     const closeModalButton= ModalNode.querySelector('.close')! as HTMLButtonElement
-    closeModalButton.addEventListener('click',this.close.bind(this))
+    closeModalButton.addEventListener('click',(event) => this.close(event))
     this.hostElement.appendChild(ModalNode)
   }
-
-  public close(){
-    console.log("Yes I am Working")
+  @Autobind
+  public close(event: Event){
+    const form=document.getElementById('user-form') as HTMLFormElement
+    event.preventDefault()
+    const IssuerDetail= new FormData(form)
+    
+    const User=Object.fromEntries(IssuerDetail.entries())
+    Modal.UserInfo.push(User)
+    // console.log(Modal.UserInfo)
+    const test= new IssuerDetails()
+    test.fillDetails()
+    this.hostElement.replaceChildren()
     if(!(this.hostElement.classList.contains('hidden'))){
       this.hostElement.classList.add('hidden')
-
-    }else{
-      console.log("causing Error")
     }
   }
 }
