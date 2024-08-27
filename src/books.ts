@@ -84,20 +84,42 @@ class Header{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;
     searchBar: HTMLInputElement;
+    NotifyCountDiv: HTMLDivElement;
 
     constructor(){
         this.templateElement= document.getElementById('header-template')! as HTMLTemplateElement
         this.hostElement= document.getElementById('Header')! as HTMLElement
-        this.renderHeader()
+        const headerNode= document.importNode(this.templateElement.content,true)
+        this.NotifyCountDiv= headerNode.querySelector('.NumberOfUser')! as HTMLDivElement
+        console.log(this.NotifyCountDiv)
+        this.renderHeader(headerNode)
         this.searchBar= this.attachSearchInput()
     }
     private attachSearchInput(){
         const SearchBookEle=this.hostElement.querySelector('.SearchBook')! as HTMLInputElement
         return SearchBookEle
     }
-    private renderHeader(){
-        const headerNode= document.importNode(this.templateElement.content,true)
+    public increaseNotifyCount(){
+      const Length=Modal.UserInfo.length
+      if(Length === 0){
+        this.NotifyCountDiv.classList.add('hidden')
+      }else{
+        this.NotifyCountDiv.classList.remove('hidden')
+        this.NotifyCountDiv.textContent=`${Length}`
+      }
+    }
+    private renderHeader(headerNode: DocumentFragment){
+        
+        const notificationButton=headerNode.querySelector('.notifyButton')! as HTMLButtonElement
+        // const NotifyCountDiv= notificationButton.querySelector('.NumberOfUser')! as HTMLDivElement
+        this.increaseNotifyCount()
+        notificationButton.addEventListener('click',this.onClickOnNotification)
         this.hostElement.appendChild(headerNode)
+    }
+    @Autobind
+    private onClickOnNotification(){
+      const SendUserNotification= new IssuerDetails()
+      SendUserNotification.fillDetails()
     }
 }
 
@@ -156,43 +178,53 @@ class notification{
         this.renderNotification()
     }
     
-    private renderNotification(){
+    public renderNotification(){
       const notificationNode = document.importNode(this.templateElement.content, true);
-      console.log(notificationNode)
-      const appendedNotification = this.hostElement.appendChild(notificationNode)
-      console.log(appendedNotification)
+      const issuerName= notificationNode.querySelector('.whoIssued')! as HTMLParagraphElement
+      const TargetUser=Modal.UserInfo.length-1
+      issuerName.textContent=`${Modal.UserInfo[TargetUser].firstName} ${Modal.UserInfo[TargetUser].lastName} issued a book.`
+      this.hostElement.appendChild(notificationNode)
       setTimeout(() => {
-          if (appendedNotification && this.hostElement.contains(appendedNotification)) {
-              this.hostElement.removeChild(appendedNotification);
-          }else{
-            console.log("error is here")
-          }
+          this.hostElement.replaceChildren()
       }, 2000);
     }
 }
 class IssuerDetails{
   templateElement: HTMLTemplateElement;
   hostElement: HTMLElement;
-
+  closeButton: HTMLButtonElement
   constructor(){
     this.templateElement= document.getElementById('IssuerInfo')! as HTMLTemplateElement
     this.hostElement= document.getElementById('IssuerDetails')! as HTMLElement
+    this.closeButton= this.hostElement.querySelector('.closeNotification')! as HTMLButtonElement
+    // if(this.closeButton.classList.contains('hidden')){
+    //   this.closeButton.classList.remove('hidden')
+    // }
+    // this.closeButton.addEventListener('click',this.closeNotify)
   }
-
+  // private closeNotify(){
+  //   this.hostElement.classList.add('hidden')
+  //   renderBooks.open()
+  //   this.closeButton.classList.add('hidden')
+  // }
   public fillDetails(){
-    const TargetUser=Modal.UserInfo.length-1
-    const Issued_Date=new Date()
-    console.log(Issued_Date)
-    
-    const IssuerInfoNode= document.importNode(this.templateElement.content,true)
-    const IssuerName= IssuerInfoNode.querySelector('.IssuerName')! as HTMLElement
-    IssuerName.textContent=`${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`
-    const IssuedDate= IssuerInfoNode.querySelector('.IssuedDate')! as HTMLSpanElement
-    IssuedDate.textContent=`${Issued_Date}`
-    const ReturnDate= IssuerInfoNode.querySelector('.ReturnDate')! as HTMLSpanElement
-    const IssuerEmail= IssuerInfoNode.querySelector('.Email')! as HTMLParagraphElement
-    IssuerEmail.textContent=`${Modal.UserInfo[TargetUser].email}`
-    this.hostElement.appendChild(IssuerInfoNode)
+    // renderBooks.close()
+      const TargetUser=Modal.UserInfo.length-1
+      Modal.UserInfo.forEach(listUser => {
+        const Issued_Date=new Date()
+        const Return_Date = new Date(Issued_Date);
+        Return_Date.setDate(Return_Date.getDate() + 15);  
+        const IssuerInfoNode= document.importNode(this.templateElement.content,true)
+        const IssuerName= IssuerInfoNode.querySelector('.IssuerName')! as HTMLElement
+        IssuerName.textContent=`${(listUser).firstName} ${(listUser).lastName} issued a book`
+        const IssuedDate= IssuerInfoNode.querySelector('.IssuedDate')! as HTMLSpanElement
+        IssuedDate.textContent=`${Issued_Date.toLocaleDateString()}`
+        const ReturnDate= IssuerInfoNode.querySelector('.ReturnDate')! as HTMLSpanElement
+        ReturnDate.textContent=`${Return_Date.toLocaleDateString()}`
+        const IssuerEmail= IssuerInfoNode.querySelector('.Email')! as HTMLParagraphElement
+        IssuerEmail.textContent=`${listUser.email}`
+        this.hostElement.appendChild(IssuerInfoNode)
+      })
   }
 }
 
@@ -210,6 +242,13 @@ class displaybooks{
         this.renderInitialLayout()
         this.renderBooks()
     }
+    
+    // public open(){
+    //   this.hostElement.classList.remove('hidden')
+    // }
+    // public close(){
+    //   this.hostElement.classList.add("hidden")
+    // }
     
     private renderBooks() {
         const gridDiv = this.hostElement.firstElementChild as HTMLDivElement;
@@ -238,8 +277,6 @@ class displaybooks{
 }
 
 
-
-
 class Modal{
   templateElement: HTMLTemplateElement;
   hostElement: HTMLElement;
@@ -264,12 +301,11 @@ class Modal{
     const form=document.getElementById('user-form') as HTMLFormElement
     event.preventDefault()
     const IssuerDetail= new FormData(form)
-    
     const User=Object.fromEntries(IssuerDetail.entries())
     Modal.UserInfo.push(User)
-    // console.log(Modal.UserInfo)
-    const test= new IssuerDetails()
-    test.fillDetails()
+    HeadersearchBarObj.increaseNotifyCount()
+    const notify=new notification()
+    console.log(Modal.UserInfo)
     this.hostElement.replaceChildren()
     if(!(this.hostElement.classList.contains('hidden'))){
       this.hostElement.classList.add('hidden')
@@ -277,6 +313,5 @@ class Modal{
   }
 }
 
-const searchBarObj= new showSingleBook()
-const notify=new notification()
+const HeadersearchBarObj= new showSingleBook()
 const renderBooks= new displaybooks()

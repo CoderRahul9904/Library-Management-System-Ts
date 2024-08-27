@@ -1,10 +1,10 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { format } from "date-fns";
 const books = [
     {
         title: "RICH DAD POOR DAD",
@@ -72,18 +72,41 @@ class Header {
     constructor() {
         this.templateElement = document.getElementById('header-template');
         this.hostElement = document.getElementById('Header');
-        this.renderHeader();
+        const headerNode = document.importNode(this.templateElement.content, true);
+        this.NotifyCountDiv = headerNode.querySelector('.NumberOfUser');
+        console.log(this.NotifyCountDiv);
+        this.renderHeader(headerNode);
         this.searchBar = this.attachSearchInput();
     }
     attachSearchInput() {
         const SearchBookEle = this.hostElement.querySelector('.SearchBook');
         return SearchBookEle;
     }
-    renderHeader() {
-        const headerNode = document.importNode(this.templateElement.content, true);
+    increaseNotifyCount() {
+        const Length = Modal.UserInfo.length;
+        if (Length === 0) {
+            this.NotifyCountDiv.classList.add('hidden');
+        }
+        else {
+            this.NotifyCountDiv.classList.remove('hidden');
+            this.NotifyCountDiv.textContent = `${Length}`;
+        }
+    }
+    renderHeader(headerNode) {
+        const notificationButton = headerNode.querySelector('.notifyButton');
+        // const NotifyCountDiv= notificationButton.querySelector('.NumberOfUser')! as HTMLDivElement
+        this.increaseNotifyCount();
+        notificationButton.addEventListener('click', this.onClickOnNotification);
         this.hostElement.appendChild(headerNode);
     }
+    onClickOnNotification() {
+        const SendUserNotification = new IssuerDetails();
+        SendUserNotification.fillDetails();
+    }
 }
+__decorate([
+    Autobind
+], Header.prototype, "onClickOnNotification", null);
 class showSingleBook extends Header {
     constructor() {
         super();
@@ -129,16 +152,12 @@ class notification {
     }
     renderNotification() {
         const notificationNode = document.importNode(this.templateElement.content, true);
-        console.log(notificationNode);
-        const appendedNotification = this.hostElement.appendChild(notificationNode);
-        console.log(appendedNotification);
+        const issuerName = notificationNode.querySelector('.whoIssued');
+        const TargetUser = Modal.UserInfo.length - 1;
+        issuerName.textContent = `${Modal.UserInfo[TargetUser].firstName} ${Modal.UserInfo[TargetUser].lastName} issued a book.`;
+        this.hostElement.appendChild(notificationNode);
         setTimeout(() => {
-            if (appendedNotification && this.hostElement.contains(appendedNotification)) {
-                this.hostElement.removeChild(appendedNotification);
-            }
-            else {
-                console.log("error is here");
-            }
+            this.hostElement.replaceChildren();
         }, 2000);
     }
 }
@@ -146,21 +165,35 @@ class IssuerDetails {
     constructor() {
         this.templateElement = document.getElementById('IssuerInfo');
         this.hostElement = document.getElementById('IssuerDetails');
+        this.closeButton = this.hostElement.querySelector('.closeNotification');
+        // if(this.closeButton.classList.contains('hidden')){
+        //   this.closeButton.classList.remove('hidden')
+        // }
+        // this.closeButton.addEventListener('click',this.closeNotify)
     }
+    // private closeNotify(){
+    //   this.hostElement.classList.add('hidden')
+    //   renderBooks.open()
+    //   this.closeButton.classList.add('hidden')
+    // }
     fillDetails() {
+        // renderBooks.close()
         const TargetUser = Modal.UserInfo.length - 1;
-        const Issued_Date = new Date();
-        console.log(Issued_Date);
-        const formattedDate = format(Issued_Date, "do MMMM yyyy 'at' h:mma");
-        const IssuerInfoNode = document.importNode(this.templateElement.content, true);
-        const IssuerName = IssuerInfoNode.querySelector('.IssuerName');
-        IssuerName.textContent = `${(Modal.UserInfo[TargetUser]).firstName} ${(Modal.UserInfo[TargetUser]).lastName} issued a book`;
-        const IssuedDate = IssuerInfoNode.querySelector('.IssuedDate');
-        IssuedDate.textContent = `${formattedDate}`;
-        const ReturnDate = IssuerInfoNode.querySelector('.ReturnDate');
-        const IssuerEmail = IssuerInfoNode.querySelector('.Email');
-        IssuerEmail.textContent = `${Modal.UserInfo[TargetUser].email}`;
-        this.hostElement.appendChild(IssuerInfoNode);
+        Modal.UserInfo.forEach(listUser => {
+            const Issued_Date = new Date();
+            const Return_Date = new Date(Issued_Date);
+            Return_Date.setDate(Return_Date.getDate() + 15);
+            const IssuerInfoNode = document.importNode(this.templateElement.content, true);
+            const IssuerName = IssuerInfoNode.querySelector('.IssuerName');
+            IssuerName.textContent = `${(listUser).firstName} ${(listUser).lastName} issued a book`;
+            const IssuedDate = IssuerInfoNode.querySelector('.IssuedDate');
+            IssuedDate.textContent = `${Issued_Date.toLocaleDateString()}`;
+            const ReturnDate = IssuerInfoNode.querySelector('.ReturnDate');
+            ReturnDate.textContent = `${Return_Date.toLocaleDateString()}`;
+            const IssuerEmail = IssuerInfoNode.querySelector('.Email');
+            IssuerEmail.textContent = `${listUser.email}`;
+            this.hostElement.appendChild(IssuerInfoNode);
+        });
     }
 }
 class displaybooks {
@@ -171,6 +204,12 @@ class displaybooks {
         this.renderInitialLayout();
         this.renderBooks();
     }
+    // public open(){
+    //   this.hostElement.classList.remove('hidden')
+    // }
+    // public close(){
+    //   this.hostElement.classList.add("hidden")
+    // }
     renderBooks() {
         const gridDiv = this.hostElement.firstElementChild;
         const fragment = document.createDocumentFragment();
@@ -214,9 +253,9 @@ class Modal {
         const IssuerDetail = new FormData(form);
         const User = Object.fromEntries(IssuerDetail.entries());
         Modal.UserInfo.push(User);
-        // console.log(Modal.UserInfo)
-        const test = new IssuerDetails();
-        test.fillDetails();
+        HeadersearchBarObj.increaseNotifyCount();
+        const notify = new notification();
+        console.log(Modal.UserInfo);
         this.hostElement.replaceChildren();
         if (!(this.hostElement.classList.contains('hidden'))) {
             this.hostElement.classList.add('hidden');
@@ -227,6 +266,5 @@ Modal.UserInfo = [];
 __decorate([
     Autobind
 ], Modal.prototype, "close", null);
-const searchBarObj = new showSingleBook();
-const notify = new notification();
+const HeadersearchBarObj = new showSingleBook();
 const renderBooks = new displaybooks();
