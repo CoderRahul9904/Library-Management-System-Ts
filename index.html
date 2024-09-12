@@ -86,7 +86,7 @@
   
   <!-- for book search -->
   <template id="book-search-template">
-    <div class="flex flex-wrap mx-auto my-auto rounded-md w-full h-auto sm:w-[50%] gap-5 sm:gap-10 justify-center items-center sm:border sm:border-stone-600">
+    <div class="flex flex-wrap mx-auto my-auto rounded-md w-full h-auto sm:w-[50%] gap-5 sm:gap-10 justify-center m-1 items-center sm:border sm:border-stone-600">
       <img class="SearchedBookImg w-[90%] h-auto sm:w-[40%] sm:h-[20%] object-contain rounded-xl" src="" alt="" />
       <table class="w-screen h-auto sm:w-[40%] sm:h-[20%] border border-gray-300">
         <tr class="border-b border-gray-300">
@@ -98,7 +98,7 @@
           <td class="BookDescription text-bold text-sm text-stone-700 border-t border-gray-300 p-2"></td>
         </tr>
       </table>
-      <button class=" p-1 w-full text-center text-green-900 bg-green-400 rounded-md text-bold" id="open">Issue</button>
+      <button class="open p-1 w-full text-center text-green-900 bg-green-400 rounded-md text-bold">Issue</button>
     </div>
   </template>
 
@@ -114,8 +114,8 @@
       <div class=" ">
         <!-- <p class=" BookName text-3xl font-bold text-red-600 p-2">RICH DAD POOR DAD</p> -->
         <div class=" flex flex-row justify-between">
-          <h1 class=" text-2xl font-bold px-2">Issued Date: <span class=" IssuedDate font-semibold  text-sm">23rd August 2024 at 5:30pm</span></h1>
-          <h1 class=" text-2xl font-bold px-2">Return Date: <span class=" ReturnDate font-semibold text-sm">8th September 2024 at 5:30pm</span></h1>
+          <h1 class=" text-2xl font-bold px-2">Issued Date: <span class=" IssuedDate font-semibold  text-sm"></span></h1>
+          <h1 class=" text-2xl font-bold px-2">Return Date: <span class=" ReturnDate font-semibold text-sm"></span></h1>
         </div>
         <p class=" Email text-sm font-bold text-center p-2"></p>
       </div>
@@ -128,9 +128,13 @@
 
 
   <!-- which book is issued by whom -->
-  <div id="IssuerDetails" class=" absolute top-20 sm:top-32 sm:left-[20%] m-2 w-full h-auto sm:w-[60%] rounded-lg bg-green-400 z-30 ">
-    
-  </div>
+   <div id="Details" class=" absolute top-20 sm:top-32 sm:left-[20%] m-2 w-full h-auto  sm:w-[60%] rounded-lg bg-green-400 z-30 hidden">
+    <div id="IssuerDetails" >
+
+    </div>
+    <button class="CloseButton text-white bg-red-400 p-2 text-right mx-5 my-1 rounded-lg font-bold hover:bg-red-500 ">Close</button>
+   </div>
+  
 
   <div id="app" >
     <header id="Header">
@@ -148,6 +152,6 @@
       <!-- searchedBookHere -->
     </bookSearch>
   </div>
-  <script type="module" src="dist/books.js"></script>
+  <script type="module" src="dist/app.js"></script>
 </body>
 </html>
