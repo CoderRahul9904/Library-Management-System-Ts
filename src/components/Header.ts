@@ -1,6 +1,6 @@
-import { Modal } from "../modals/modal.js";
-import { Autobind } from "../decorators/AutoBindDecorator.js";
-import { IssuerDetails } from "./IssuerDetails.js";
+import { Modal } from "../modals/modal";
+import { Autobind } from "../decorators/AutoBindDecorator";
+import { IssuerDetails } from "./IssuerDetails";
 
 export class Header{
     templateElement: HTMLTemplateElement;
@@ -13,7 +13,6 @@ export class Header{
         this.hostElement= document.getElementById('Header')! as HTMLElement
         const headerNode= document.importNode(this.templateElement.content,true)
         this.NotifyCountDiv= headerNode.querySelector('.NumberOfUser')! as HTMLDivElement
-        console.log(this.NotifyCountDiv)
         this.renderHeader(headerNode)
         this.searchBar= this.attachSearchInput()
     }

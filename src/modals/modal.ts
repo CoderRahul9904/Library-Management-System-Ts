@@ -1,7 +1,7 @@
-import { UserInfoType } from "../interfaces/UserInfoType.js";
-import { Autobind } from "../decorators/AutoBindDecorator.js";
-import { HeadersearchBarObj } from "../app.js";
-import { notification } from "../components/Notification.js";
+import { UserInfoType } from "../interfaces/UserInfoType";
+import { Autobind } from "../decorators/AutoBindDecorator";
+import { HeadersearchBarObj } from "../app";
+import { notification } from "../components/Notification";
 export class Modal{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;

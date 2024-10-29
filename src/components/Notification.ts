@@ -1,4 +1,4 @@
-import { Modal } from "../modals/modal.js";
+import { Modal } from "../modals/modal";
 export class notification{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;

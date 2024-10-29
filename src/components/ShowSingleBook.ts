@@ -1,9 +1,9 @@
-import { Header } from "./Header.js";
-import { Book } from "../interfaces/BookInterface.js";
-import { Autobind } from "../decorators/AutoBindDecorator.js";
-import { renderBooks} from "../app.js";
-import { books } from "../util/CollectionOfBooks.js";
-import { Modal } from "../modals/modal.js";
+import { Header } from "./Header";
+import { Book } from "../interfaces/BookInterface";
+import { Autobind } from "../decorators/AutoBindDecorator";
+import { renderBooks} from "../app";
+import { books } from "../util/CollectionOfBooks";
+import { Modal } from "../modals/modal";
 export class showSingleBook extends Header{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;

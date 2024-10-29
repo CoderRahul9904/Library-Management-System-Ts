@@ -1,7 +1,7 @@
-import { UserInfoType  } from "../interfaces/UserInfoType.js";
-import { renderBooks } from "../app.js";
-import { HeadersearchBarObj } from "../app.js";
-import { Modal } from "../modals/modal.js";
+import { UserInfoType  } from "../interfaces/UserInfoType";
+import { renderBooks } from "../app";
+import { HeadersearchBarObj } from "../app";
+import { Modal } from "../modals/modal";
 export class IssuerDetails {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;

@@ -1,5 +1,5 @@
-import { books } from "../util/CollectionOfBooks.js";
-import { Modal } from "../modals/modal.js";
+import { books } from "../util/CollectionOfBooks";
+import { Modal } from "../modals/modal";
 export class displaybooks{
     templateElement: HTMLTemplateElement;
     hostElement: HTMLElement;
