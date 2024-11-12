@@ -10,6 +10,10 @@ A **Library Management System** built using **TypeScript**, designed to manage a
 - **Simple, Clean UI**: Basic HTML and CSS used for layout and styling, focusing on readability and usability.
 - **Custom State Management**: Local state management to handle book data, search results, and selected book details.
 
+## 👀 View Project
+[Watch the full video](https://drive.google.com/file/d/1FJxt-GHlOUoFmJ_mnHfSK_Av_1TAndwB/view?usp=sharing)
+
+
 ## 🛠️ Project Structure
 
 ```plaintext
@@ -76,3 +80,5 @@ This project is licensed under the MIT License.
 Contributions are welcome! Feel free to submit a pull request or open an issue for suggestions, bug fixes, or improvements.
 
 ---
+
+
