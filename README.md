@@ -11,8 +11,7 @@ A **Library Management System** built using **TypeScript**, designed to manage a
 - **Custom State Management**: Local state management to handle book data, search results, and selected book details.
 
 ## 👀 View Project
-[Watch the full video](https://drive.google.com/file/d/1FJxt-GHlOUoFmJ_mnHfSK_Av_1TAndwB/view?usp=sharing)
-
+<video src="./public/Library-Management-Ts.mp4" controls></video>
 
 ## 🛠️ Project Structure
 
